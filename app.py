@@ -17,14 +17,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Inicializar claves en st.session_state
-if "input1" not in st.session_state:
-    st.session_state["input1"] = ""
-if "input2" not in st.session_state:
-    st.session_state["input2"] = ""
-if "input3" not in st.session_state:
-    st.session_state["input3"] = ""
-
 # Función para validar entradas
 def validate_input(input_value, length, prefix=None):
     if not input_value.isdigit():
@@ -47,16 +39,16 @@ def process_inputs(input1, input2):
 st.title("Aplicación de Validación y Procesamiento de Inputs")
 st.write("Ingrese los valores para validar, procesar y guardar los datos.")
 
-# Contenedores para permitir que los valores se actualicen dinámicamente
-input1 = st.text_input("Ingrese el primer valor (20 dígitos):", key="input1")
-input2 = st.text_input("Ingrese el segundo valor (40 dígitos):", key="input2")
-input3 = st.text_input("Texto adicional (opcional):", key="input3")
+# Campos de entrada
+input1 = st.text_input("Ingrese el primer valor (20 dígitos):")
+input2 = st.text_input("Ingrese el segundo valor (40 dígitos):")
+input3 = st.text_input("Texto adicional (opcional):")
 
 # Validar y guardar
 if st.button("Validar y Guardar"):
     valid1, error1 = validate_input(input1, 20, "003")
     valid2, error2 = validate_input(input2, 40, "90")
-    
+
     if not valid1:
         st.error(f"Error en Input 1: {error1}")
     elif not valid2:
@@ -64,7 +56,8 @@ if st.button("Validar y Guardar"):
     else:
         sscc, material, cantidad, lote = process_inputs(input1, input2)
         st.success("Todos los valores son válidos. Se guardarán en el archivo.")
-        
+
+        # Guardar en Excel
         # Guardar en Excel como cadenas
         file_name = "datos.xlsx"
         new_data = {
@@ -74,22 +67,21 @@ if st.button("Validar y Guardar"):
             "Lote": [lote],
             "Texto Adicional": [input3],
         }
+        df_new = pd.DataFrame(new_data)
         df_new = pd.DataFrame(new_data, dtype=str)  # Asegurar que todo es texto
-        
+
         if os.path.exists(file_name):
+            df_existing = pd.read_excel(file_name)
             df_existing = pd.read_excel(file_name, dtype=str)  # Leer como texto
             df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+            df_combined.to_excel(file_name, index=False)
             df_combined.to_excel(file_name, index=False, engine='openpyxl')  # Escribir como texto
         else:
+            df_new.to_excel(file_name, index=False)
             df_new.to_excel(file_name, index=False, engine='openpyxl')  # Crear archivo nuevo
-        
+
         st.write("Datos guardados exitosamente en `datos.xlsx`.")
         st.write(df_new)
-        
-        # Vaciar los campos de entrada
-        st.session_state["input1"] = ""
-        st.session_state["input2"] = ""
-        st.session_state["input3"] = ""
 
 # Botón para borrar datos existentes
 if st.button("Borrar Datos Previos"):
@@ -102,5 +94,6 @@ if st.button("Borrar Datos Previos"):
 # Mostrar datos guardados (opcional)
 if os.path.exists("datos.xlsx"):
     st.write("Datos guardados actualmente:")
+    st.dataframe(pd.read_excel("datos.xlsx"))
     st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
 
