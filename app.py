@@ -58,7 +58,6 @@ if st.button("Validar y Guardar"):
         st.success("Todos los valores son válidos. Se guardarán en el archivo.")
 
         # Guardar en Excel
-        # Guardar en Excel como cadenas
         file_name = "datos.xlsx"
         new_data = {
             "SSCC": [sscc],
@@ -67,18 +66,17 @@ if st.button("Validar y Guardar"):
             "Lote": [lote],
             "Texto Adicional": [input3],
         }
-        df_new = pd.DataFrame(new_data)
-        df_new = pd.DataFrame(new_data, dtype=str)  # Asegurar que todo es texto
+        df_new = pd.DataFrame(new_data, dtype=str)  # Todo como texto
 
         if os.path.exists(file_name):
-            df_existing = pd.read_excel(file_name)
-            df_existing = pd.read_excel(file_name, dtype=str)  # Leer como texto
+            # Leer como texto
+            df_existing = pd.read_excel(file_name, dtype=str)
             df_combined = pd.concat([df_existing, df_new], ignore_index=True)
-            df_combined.to_excel(file_name, index=False)
-            df_combined.to_excel(file_name, index=False, engine='openpyxl')  # Escribir como texto
+            # Guardar combinado como texto
+            df_combined.to_excel(file_name, index=False, engine='openpyxl')
         else:
-            df_new.to_excel(file_name, index=False)
-            df_new.to_excel(file_name, index=False, engine='openpyxl')  # Crear archivo nuevo
+            # Crear archivo nuevo con datos como texto
+            df_new.to_excel(file_name, index=False, engine='openpyxl')
 
         st.write("Datos guardados exitosamente en `datos.xlsx`.")
         st.write(df_new)
@@ -94,6 +92,5 @@ if st.button("Borrar Datos Previos"):
 # Mostrar datos guardados (opcional)
 if os.path.exists("datos.xlsx"):
     st.write("Datos guardados actualmente:")
-    st.dataframe(pd.read_excel("datos.xlsx"))
     st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
 
