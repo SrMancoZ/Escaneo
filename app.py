@@ -35,7 +35,7 @@ def process_inputs(input1, input2):
     lote = input2[-9:]  # Últimos 9 dígitos
     return sscc, material, cantidad, lote
 
-# Inicializar estado para los inputs
+# Inicializar estado para los inputs si no existen
 if "input1" not in st.session_state:
     st.session_state.input1 = ""
 if "input2" not in st.session_state:
@@ -90,9 +90,11 @@ if st.button("Validar y Guardar"):
         st.write(df_new)
 
         # Reiniciar los valores de los campos de texto
-        st.session_state.input1 = ""
-        st.session_state.input2 = ""
-        st.session_state.input3 = ""
+        st.session_state.update({
+            "input1": "",
+            "input2": "",
+            "input3": ""
+        })
 
 # Botón para borrar datos existentes
 if st.button("Borrar Datos Previos"):
