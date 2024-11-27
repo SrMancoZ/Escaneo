@@ -55,31 +55,42 @@ if st.button("Validar y Guardar"):
         st.error(f"Error en Input 2: {error2}")
     else:
         sscc, material, cantidad, lote = process_inputs(input1, input2)
-        st.success("Todos los valores son válidos. Se guardarán en el archivo.")
-
-        # Guardar en Excel
+        
+        # Verificar si ya existe el archivo
         file_name = "datos.xlsx"
-        new_data = {
-            "SSCC": [sscc],
-            "Material": [material],
-            "Cantidad por pallet": [cantidad],
-            "Lote": [lote],
-            "Texto Adicional": [input3],
-        }
-        df_new = pd.DataFrame(new_data, dtype=str)  # Todo como texto
-
         if os.path.exists(file_name):
-            # Leer como texto
+            # Leer el archivo existente
             df_existing = pd.read_excel(file_name, dtype=str)
-            df_combined = pd.concat([df_existing, df_new], ignore_index=True)
-            # Guardar combinado como texto
-            df_combined.to_excel(file_name, index=False, engine='openpyxl')
+            # Verificar si el SSCC ya está registrado
+            if sscc in df_existing["SSCC"].values:
+                st.error(f"El SSCC '{sscc}' ya está registrado. No se guardará nuevamente.")
+            else:
+                # Guardar nuevo registro
+                new_data = {
+                    "SSCC": [sscc],
+                    "Material": [material],
+                    "Cantidad por pallet": [cantidad],
+                    "Lote": [lote],
+                    "Texto Adicional": [input3],
+                }
+                df_new = pd.DataFrame(new_data, dtype=str)
+                df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+                df_combined.to_excel(file_name, index=False, engine='openpyxl')
+                st.success("Datos guardados exitosamente.")
+                st.write(df_new)
         else:
-            # Crear archivo nuevo con datos como texto
+            # Crear un nuevo archivo si no existe
+            new_data = {
+                "SSCC": [sscc],
+                "Material": [material],
+                "Cantidad por pallet": [cantidad],
+                "Lote": [lote],
+                "Texto Adicional": [input3],
+            }
+            df_new = pd.DataFrame(new_data, dtype=str)
             df_new.to_excel(file_name, index=False, engine='openpyxl')
-
-        st.write("Datos guardados exitosamente en `datos.xlsx`.")
-        st.write(df_new)
+            st.success("Datos guardados exitosamente.")
+            st.write(df_new)
 
 # Botón para borrar datos existentes
 if st.button("Borrar Datos Previos"):
@@ -93,4 +104,3 @@ if st.button("Borrar Datos Previos"):
 if os.path.exists("datos.xlsx"):
     st.write("Datos guardados actualmente:")
     st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
-
