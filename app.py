@@ -35,14 +35,22 @@ def process_inputs(input1, input2):
     lote = input2[-9:]  # Últimos 9 dígitos
     return sscc, material, cantidad, lote
 
+# Inicializar estado para los inputs
+if "input1" not in st.session_state:
+    st.session_state.input1 = ""
+if "input2" not in st.session_state:
+    st.session_state.input2 = ""
+if "input3" not in st.session_state:
+    st.session_state.input3 = ""
+
 # Título de la app
 st.title("Aplicación de Validación y Procesamiento de Inputs")
 st.write("Ingrese los valores para validar, procesar y guardar los datos.")
 
 # Campos de entrada
-input1 = st.text_input("Ingrese el primer valor (20 dígitos):")
-input2 = st.text_input("Ingrese el segundo valor (40 dígitos):")
-input3 = st.text_input("Texto adicional (opcional):")
+input1 = st.text_input("Ingrese el primer valor (20 dígitos):", value=st.session_state.input1, key="input1")
+input2 = st.text_input("Ingrese el segundo valor (40 dígitos):", value=st.session_state.input2, key="input2")
+input3 = st.text_input("Texto adicional (opcional):", value=st.session_state.input3, key="input3")
 
 # Validar y guardar
 if st.button("Validar y Guardar"):
@@ -81,6 +89,13 @@ if st.button("Validar y Guardar"):
         st.write("Datos guardados exitosamente en `datos.xlsx`.")
         st.write(df_new)
 
+# Botón de reinicio para limpiar los campos de entrada
+if st.button("Reiniciar Campos"):
+    st.session_state.input1 = ""
+    st.session_state.input2 = ""
+    st.session_state.input3 = ""
+    st.success("Los campos se han reiniciado.")
+
 # Botón para borrar datos existentes
 if st.button("Borrar Datos Previos"):
     if os.path.exists("datos.xlsx"):
@@ -93,4 +108,5 @@ if st.button("Borrar Datos Previos"):
 if os.path.exists("datos.xlsx"):
     st.write("Datos guardados actualmente:")
     st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
+
 
