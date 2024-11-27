@@ -53,7 +53,7 @@ def process_inputs(input1, input2):
     return sscc, material, cantidad, lote
 
 # Título de la app
-st.title("Validación y Procesamiento de Inputs 📋")
+st.title("Escaneo de pallets 📋")
 
 st.subheader("📥 Ingrese los valores")
 st.write("Ingrese los datos en los campos a continuación y asegúrese de que cumplen con los formatos requeridos.")
@@ -61,8 +61,8 @@ st.write("Ingrese los datos en los campos a continuación y asegúrese de que cu
 # Campos de entrada
 input1 = st.text_input("Ingrese el primer valor (20 dígitos):")
 input2 = st.text_input("Ingrese el segundo valor (40 dígitos):")
-input3 = st.text_input("Texto adicional (opcional):")
-input_comments = st.text_area("Comentarios adicionales (opcional):")  # Nuevo campo de comentarios
+input3 = st.text_input("Posición pallet:")
+input_comments = st.text_input("Comentarios en caso de pallet bloqueado")
 
 # Validar y guardar
 if st.button("✅ Validar y Guardar"):
