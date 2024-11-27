@@ -110,3 +110,4 @@ if os.path.exists("datos.xlsx"):
     st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
 
 
+
