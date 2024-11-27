@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import os
-import time  # Importamos time para manejar el refresco
 
 # Configurar colores de la interfaz
 st.set_page_config(page_title="Validación de Inputs", layout="centered")
@@ -70,16 +69,17 @@ if st.button("Validar y Guardar"):
         df_new = pd.DataFrame(new_data, dtype=str)  # Todo como texto
 
         if os.path.exists(file_name):
+            # Leer como texto
             df_existing = pd.read_excel(file_name, dtype=str)
             df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+            # Guardar combinado como texto
             df_combined.to_excel(file_name, index=False, engine='openpyxl')
         else:
+            # Crear archivo nuevo con datos como texto
             df_new.to_excel(file_name, index=False, engine='openpyxl')
 
-        # Mostrar mensaje y refrescar automáticamente
-        st.success("Todos los valores son válidos. Se guardarán en el archivo.")
-        time.sleep(2)  # Esperar 2 segundos antes del refresco
-        st.experimental_rerun()  # Refrescar la página
+        st.write("Datos guardados exitosamente en `datos.xlsx`.")
+        st.write(df_new)
 
 # Botón para borrar datos existentes
 if st.button("Borrar Datos Previos"):
@@ -93,5 +93,4 @@ if st.button("Borrar Datos Previos"):
 if os.path.exists("datos.xlsx"):
     st.write("Datos guardados actualmente:")
     st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
-
 
