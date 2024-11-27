@@ -39,10 +39,10 @@ def process_inputs(input1, input2):
 st.title("Aplicación de Validación y Procesamiento de Inputs")
 st.write("Ingrese los valores para validar, procesar y guardar los datos.")
 
-# Campos de entrada
-input1 = st.text_input("Ingrese el primer valor (20 dígitos):")
-input2 = st.text_input("Ingrese el segundo valor (40 dígitos):")
-input3 = st.text_input("Texto adicional (opcional):")
+# Contenedores para permitir que los valores se actualicen dinámicamente
+input1 = st.text_input("Ingrese el primer valor (20 dígitos):", key="input1")
+input2 = st.text_input("Ingrese el segundo valor (40 dígitos):", key="input2")
+input3 = st.text_input("Texto adicional (opcional):", key="input3")
 
 # Validar y guardar
 if st.button("Validar y Guardar"):
@@ -77,6 +77,11 @@ if st.button("Validar y Guardar"):
         
         st.write("Datos guardados exitosamente en `datos.xlsx`.")
         st.write(df_new)
+        
+        # Vaciar los campos de entrada
+        st.session_state["input1"] = ""
+        st.session_state["input2"] = ""
+        st.session_state["input3"] = ""
 
 # Botón para borrar datos existentes
 if st.button("Borrar Datos Previos"):
