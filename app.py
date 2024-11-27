@@ -43,14 +43,20 @@ if "input2" not in st.session_state:
 if "input3" not in st.session_state:
     st.session_state.input3 = ""
 
+# Función para reiniciar valores
+def reset_inputs():
+    st.session_state.input1 = ""
+    st.session_state.input2 = ""
+    st.session_state.input3 = ""
+
 # Título de la app
 st.title("Aplicación de Validación y Procesamiento de Inputs")
 st.write("Ingrese los valores para validar, procesar y guardar los datos.")
 
 # Campos de entrada
-input1 = st.text_input("Ingrese el primer valor (20 dígitos):", value=st.session_state.input1, key="input1")
-input2 = st.text_input("Ingrese el segundo valor (40 dígitos):", value=st.session_state.input2, key="input2")
-input3 = st.text_input("Texto adicional (opcional):", value=st.session_state.input3, key="input3")
+input1 = st.text_input("Ingrese el primer valor (20 dígitos):", key="input1")
+input2 = st.text_input("Ingrese el segundo valor (40 dígitos):", key="input2")
+input3 = st.text_input("Texto adicional (opcional):", key="input3")
 
 # Validar y guardar
 if st.button("Validar y Guardar"):
@@ -90,11 +96,7 @@ if st.button("Validar y Guardar"):
         st.write(df_new)
 
         # Reiniciar los valores de los campos de texto
-        st.session_state.update({
-            "input1": "",
-            "input2": "",
-            "input3": ""
-        })
+        reset_inputs()
 
 # Botón para borrar datos existentes
 if st.button("Borrar Datos Previos"):
@@ -108,6 +110,7 @@ if st.button("Borrar Datos Previos"):
 if os.path.exists("datos.xlsx"):
     st.write("Datos guardados actualmente:")
     st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
+
 
 
 
