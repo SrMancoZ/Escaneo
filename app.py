@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
+import time  # Importamos time para manejar el refresco
 
 # Configurar colores de la interfaz
 st.set_page_config(page_title="Validación de Inputs", layout="centered")
@@ -35,35 +36,17 @@ def process_inputs(input1, input2):
     lote = input2[-9:]  # Últimos 9 dígitos
     return sscc, material, cantidad, lote
 
-# Inicializar estado para los inputs si no existen
-if "input1" not in st.session_state:
-    st.session_state.input1 = ""
-if "input2" not in st.session_state:
-    st.session_state.input2 = ""
-if "input3" not in st.session_state:
-    st.session_state.input3 = ""
-
-# Función para reiniciar valores
-def reset_inputs():
-    st.session_state.input1 = ""
-    st.session_state.input2 = ""
-    st.session_state.input3 = ""
-
 # Título de la app
 st.title("Aplicación de Validación y Procesamiento de Inputs")
 st.write("Ingrese los valores para validar, procesar y guardar los datos.")
 
 # Campos de entrada
-st.text_input("Ingrese el primer valor (20 dígitos):", key="input1")
-st.text_input("Ingrese el segundo valor (40 dígitos):", key="input2")
-st.text_input("Texto adicional (opcional):", key="input3")
+input1 = st.text_input("Ingrese el primer valor (20 dígitos):")
+input2 = st.text_input("Ingrese el segundo valor (40 dígitos):")
+input3 = st.text_input("Texto adicional (opcional):")
 
 # Validar y guardar
 if st.button("Validar y Guardar"):
-    input1 = st.session_state.input1
-    input2 = st.session_state.input2
-    input3 = st.session_state.input3
-
     valid1, error1 = validate_input(input1, 20, "003")
     valid2, error2 = validate_input(input2, 40, "90")
 
@@ -87,20 +70,16 @@ if st.button("Validar y Guardar"):
         df_new = pd.DataFrame(new_data, dtype=str)  # Todo como texto
 
         if os.path.exists(file_name):
-            # Leer como texto
             df_existing = pd.read_excel(file_name, dtype=str)
             df_combined = pd.concat([df_existing, df_new], ignore_index=True)
-            # Guardar combinado como texto
             df_combined.to_excel(file_name, index=False, engine='openpyxl')
         else:
-            # Crear archivo nuevo con datos como texto
             df_new.to_excel(file_name, index=False, engine='openpyxl')
 
-        st.write("Datos guardados exitosamente en `datos.xlsx`.")
-        st.write(df_new)
-
-        # Reiniciar los valores de los campos de texto
-        reset_inputs()
+        # Mostrar mensaje y refrescar automáticamente
+        st.success("Todos los valores son válidos. Se guardarán en el archivo.")
+        time.sleep(2)  # Esperar 2 segundos antes del refresco
+        st.experimental_rerun()  # Refrescar la página
 
 # Botón para borrar datos existentes
 if st.button("Borrar Datos Previos"):
