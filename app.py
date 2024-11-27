@@ -17,14 +17,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Inicializar el estado de los campos de entrada
-if "input1" not in st.session_state:
-    st.session_state.input1 = ""
-if "input2" not in st.session_state:
-    st.session_state.input2 = ""
-if "input3" not in st.session_state:
-    st.session_state.input3 = ""
-
 # Función para validar entradas
 def validate_input(input_value, length, prefix=None):
     if not input_value.isdigit():
@@ -48,21 +40,21 @@ st.title("Aplicación de Validación y Procesamiento de Inputs")
 st.write("Ingrese los valores para validar, procesar y guardar los datos.")
 
 # Campos de entrada
-input1 = st.text_input("Ingrese el primer valor (20 dígitos):", value=st.session_state.input1, key="input1")
-input2 = st.text_input("Ingrese el segundo valor (40 dígitos):", value=st.session_state.input2, key="input2")
-input3 = st.text_input("Texto adicional (opcional):", value=st.session_state.input3, key="input3")
+input1 = st.text_input("Ingrese el primer valor (20 dígitos):")
+input2 = st.text_input("Ingrese el segundo valor (40 dígitos):")
+input3 = st.text_input("Texto adicional (opcional):")
 
 # Validar y guardar
 if st.button("Validar y Guardar"):
-    valid1, error1 = validate_input(st.session_state.input1, 20, "003")
-    valid2, error2 = validate_input(st.session_state.input2, 40, "90")
+    valid1, error1 = validate_input(input1, 20, "003")
+    valid2, error2 = validate_input(input2, 40, "90")
 
     if not valid1:
         st.error(f"Error en Input 1: {error1}")
     elif not valid2:
         st.error(f"Error en Input 2: {error2}")
     else:
-        sscc, material, cantidad, lote = process_inputs(st.session_state.input1, st.session_state.input2)
+        sscc, material, cantidad, lote = process_inputs(input1, input2)
         st.success("Todos los valores son válidos. Se guardarán en el archivo.")
 
         # Guardar en Excel
@@ -72,7 +64,7 @@ if st.button("Validar y Guardar"):
             "Material": [material],
             "Cantidad por pallet": [cantidad],
             "Lote": [lote],
-            "Texto Adicional": [st.session_state.input3],
+            "Texto Adicional": [input3],
         }
         df_new = pd.DataFrame(new_data, dtype=str)  # Todo como texto
 
@@ -89,11 +81,6 @@ if st.button("Validar y Guardar"):
         st.write("Datos guardados exitosamente en `datos.xlsx`.")
         st.write(df_new)
 
-        # Vaciar los campos de entrada
-        st.session_state.input1 = ""
-        st.session_state.input2 = ""
-        st.session_state.input3 = ""
-
 # Botón para borrar datos existentes
 if st.button("Borrar Datos Previos"):
     if os.path.exists("datos.xlsx"):
@@ -106,3 +93,4 @@ if st.button("Borrar Datos Previos"):
 if os.path.exists("datos.xlsx"):
     st.write("Datos guardados actualmente:")
     st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
+
