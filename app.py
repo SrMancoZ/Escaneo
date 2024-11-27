@@ -36,7 +36,7 @@ def process_inputs(input1, input2):
     return sscc, material, cantidad, lote
 
 # Título de la app
-st.title("Aplicación de Validación y Procesamiento de Inputs")
+st.title("Escaneo de pallets producto terminado")
 st.write("Ingrese los valores para validar, procesar y guardar los datos.")
 
 # Campos de entrada
