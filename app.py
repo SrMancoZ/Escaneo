@@ -104,3 +104,4 @@ if st.button("Borrar Datos Previos"):
 if os.path.exists("datos.xlsx"):
     st.write("Datos guardados actualmente:")
     st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
+
