@@ -17,6 +17,20 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# Inicializar el estado de los inputs
+if "input1" not in st.session_state:
+    st.session_state.input1 = ""
+if "input2" not in st.session_state:
+    st.session_state.input2 = ""
+if "input3" not in st.session_state:
+    st.session_state.input3 = ""
+
+# Función para vaciar inputs
+def clear_inputs():
+    st.session_state.input1 = ""
+    st.session_state.input2 = ""
+    st.session_state.input3 = ""
+
 # Función para validar entradas
 def validate_input(input_value, length, prefix=None):
     if not input_value.isdigit():
@@ -39,10 +53,10 @@ def process_inputs(input1, input2):
 st.title("Aplicación de Validación y Procesamiento de Inputs")
 st.write("Ingrese los valores para validar, procesar y guardar los datos.")
 
-# Campos de entrada
-input1 = st.text_input("Ingrese el primer valor (20 dígitos):")
-input2 = st.text_input("Ingrese el segundo valor (40 dígitos):")
-input3 = st.text_input("Texto adicional (opcional):")
+# Campos de entrada con valores desde el estado
+input1 = st.text_input("Ingrese el primer valor (20 dígitos):", value=st.session_state.input1, key="input1")
+input2 = st.text_input("Ingrese el segundo valor (40 dígitos):", value=st.session_state.input2, key="input2")
+input3 = st.text_input("Texto adicional (opcional):", value=st.session_state.input3, key="input3")
 
 # Validar y guardar
 if st.button("Validar y Guardar"):
@@ -92,6 +106,11 @@ if st.button("Validar y Guardar"):
             st.success("Datos guardados exitosamente.")
             st.write(df_new)
 
+# Botón para vaciar los inputs
+if st.button("Vaciar Inputs"):
+    clear_inputs()
+    st.success("Inputs vaciados exitosamente.")
+
 # Botón para borrar datos existentes
 if st.button("Borrar Datos Previos"):
     if os.path.exists("datos.xlsx"):
@@ -104,4 +123,5 @@ if st.button("Borrar Datos Previos"):
 if os.path.exists("datos.xlsx"):
     st.write("Datos guardados actualmente:")
     st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
+
 
