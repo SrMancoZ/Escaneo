@@ -1,11 +1,9 @@
-# archivo: app.py
-
 import streamlit as st
 import pandas as pd
 import os
 
 # Configurar colores de la interfaz
-st.set_page_config(page_title="Validación de Inputs", layout="centered")  # Debe ser el primer comando de Streamlit
+st.set_page_config(page_title="Validación de Inputs", layout="centered")
 
 st.markdown(
     """
@@ -44,18 +42,18 @@ if st.button("Validar y Guardar"):
     if valid1 and valid2:
         st.success("Todos los valores son válidos. Se guardarán en el archivo.")
         
-        # Guardar en Excel
+        # Guardar en Excel como cadenas
         file_name = "datos.xlsx"
         new_data = {
-            "Input1": [input1],
-            "Input2": [input2],
-            "Input3": [input3],
+            "Input1": [str(input1)],  # Guardar como cadena
+            "Input2": [str(input2)],  # Guardar como cadena
+            "Input3": [str(input3)],  # Guardar como cadena
         }
-        df_new = pd.DataFrame(new_data)
+        df_new = pd.DataFrame(new_data, dtype=str)  # Asegurar que todo es texto
         
         if os.path.exists(file_name):
             # Si el archivo existe, agregar los datos
-            df_existing = pd.read_excel(file_name)
+            df_existing = pd.read_excel(file_name, dtype=str)  # Leer como texto
             df_combined = pd.concat([df_existing, df_new], ignore_index=True)
             df_combined.to_excel(file_name, index=False)
         else:
@@ -69,5 +67,5 @@ if st.button("Validar y Guardar"):
 # Mostrar datos guardados (opcional)
 if os.path.exists("datos.xlsx"):
     st.write("Datos guardados actualmente:")
-    st.dataframe(pd.read_excel("datos.xlsx"))
+    st.dataframe(pd.read_excel("datos.xlsx", dtype=str))  # Mostrar como texto
 
