@@ -53,7 +53,7 @@ def process_inputs(input1, input2):
     return sscc, material, cantidad, lote
 
 # Título de la app
-st.title("Escaneo de pallets 📋")
+st.title("Validación y Procesamiento de Inputs 📋")
 
 st.subheader("📥 Ingrese los valores")
 st.write("Ingrese los datos en los campos a continuación y asegúrese de que cumplen con los formatos requeridos.")
@@ -62,6 +62,7 @@ st.write("Ingrese los datos en los campos a continuación y asegúrese de que cu
 input1 = st.text_input("Ingrese el primer valor (20 dígitos):")
 input2 = st.text_input("Ingrese el segundo valor (40 dígitos):")
 input3 = st.text_input("Texto adicional (opcional):")
+input_comments = st.text_area("Comentarios adicionales (opcional):")  # Nuevo campo de comentarios
 
 # Validar y guardar
 if st.button("✅ Validar y Guardar"):
@@ -92,6 +93,7 @@ if st.button("✅ Validar y Guardar"):
                         "Cantidad por pallet": [cantidad],
                         "Lote": [lote],
                         "Texto Adicional": [input3],
+                        "Comentarios Adicionales": [input_comments],  # Agregar comentarios
                     }
                     df_new = pd.DataFrame(new_data, dtype=str)
                     df_combined = pd.concat([df_existing, df_new], ignore_index=True)
@@ -106,6 +108,7 @@ if st.button("✅ Validar y Guardar"):
                     "Cantidad por pallet": [cantidad],
                     "Lote": [lote],
                     "Texto Adicional": [input3],
+                    "Comentarios Adicionales": [input_comments],  # Agregar comentarios
                 }
                 df_new = pd.DataFrame(new_data, dtype=str)
                 df_new.to_excel(file_name, index=False, engine='openpyxl')
@@ -132,6 +135,5 @@ if st.button("🗑️ Borrar Datos Previos"):
         st.success("Datos anteriores eliminados.")
     else:
         st.warning("No hay datos previos para borrar.")
-
 
 
