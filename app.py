@@ -1,4 +1,4 @@
-import streamlit as st
+caimport streamlit as st
 import pandas as pd
 import os
 
@@ -53,7 +53,7 @@ def process_inputs(input1, input2):
     return sscc, material, cantidad, lote
 
 # Título de la app
-st.title("Validación y Procesamiento de Inputs 📋")
+st.title("Escaneo de pallets 📋")
 
 st.subheader("📥 Ingrese los valores")
 st.write("Ingrese los datos en los campos a continuación y asegúrese de que cumplen con los formatos requeridos.")
