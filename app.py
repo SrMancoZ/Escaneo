@@ -17,6 +17,14 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# Inicializar claves en st.session_state
+if "input1" not in st.session_state:
+    st.session_state["input1"] = ""
+if "input2" not in st.session_state:
+    st.session_state["input2"] = ""
+if "input3" not in st.session_state:
+    st.session_state["input3"] = ""
+
 # Función para validar entradas
 def validate_input(input_value, length, prefix=None):
     if not input_value.isdigit():
